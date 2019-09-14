@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Home</title>
+{% endblock %}
+
+{% block content %}
+<p>This is home</p>
+
+<ul>
+  {% for img in images %}
+  <li><a href="{{ img }}">{{ img }}</a></li>
+  {% endfor %}
+</ul>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+  <input type="file" name="file">
+  <button>Upload</button>
+</form>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+{% endblock %}
