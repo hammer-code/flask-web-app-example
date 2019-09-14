@@ -5,18 +5,65 @@
 {% endblock %}
 
 {% block content %}
-<p>This is home</p>
+<div class="container">
+  <h1 class="mb-4">Daftar Buku</h1>
 
-<ul>
-  {% for img in images %}
-  <li><a href="{{ img }}">{{ img }}</a></li>
-  {% endfor %}
-</ul>
+  <div>
+    {% for book in books %}
+    <div class="book-card">
+      <div style="display: flex">
+        <div class="book-card-image" style="background: url({{ book.img_path }})">
+          <img src="{{ book.img_path }}"  class="hidden">
+        </div>
 
-<form action="/upload" method="post" enctype="multipart/form-data">
-  <input type="file" name="file">
-  <button>Upload</button>
-</form>
+        <div class="book-card-content">
+          <div class="flex">
+            <!-- Book Info -->
+            <div id="book-info-{{ book.id }}" class="p-4">
+              <h3 class="mb-4">{{ book.title }}</h3>
+              <h4><strong>Pengarang</strong>: {{ book.author }}</h4>
+            </div>
+
+            <!-- Book Edit Form -->
+            <form
+              id="book-edit-form-{{ book.id }}"
+              method="post"
+              enctype="multipart/form-data"
+              class="hidden p-4"
+              action="/update-book/{{ book.id }}"
+            >
+              <div class="mb-2">
+                <label for="title" class="mb-2">Judul</label>
+                <input type="text" id="title" name="title" value="{{ book.title }}">
+              </div>
+
+              <div class="mb-2">
+                <label for="author" class="mb-2">Pengarang</label>
+                <input type="text" id="author" name="author"  value="{{ book.author }}">
+              </div>
+
+              <div class="mb-4">
+                <label for="file" class="mb-2">Gambar</label>
+                <input type="file" name="file">
+              </div>
+
+              <button class="orange">Perbarui</button>
+            </form>
+          </div>
+
+          <div class="book-card-action">
+            <button class="edit-button" data-id="{{ book.id }}">Ubah</button>
+
+            <form style="display: inline-block" method="post" action="/delete-book/{{ book.id }}">
+              <button class="red">Hapus</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
 
 {% block script %}

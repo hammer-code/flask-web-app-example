@@ -5,7 +5,12 @@
 {% endblock %}
 
 {% block content %}
-<p>This is ping</p>
+<div class="container">
+  <h1 class="mb-4">Ping</h1>
+
+  <p>Env: {{ env }}</p>
+  <p>Debug: {{ debug }}</p>
+</div>
 {% endblock %}
 
 {% block script %}

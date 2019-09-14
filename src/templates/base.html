@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  {% block head %}
+
   <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  {% block head %}
   {% endblock %}
 </head>
-<body>
-  <nav>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/ping">Ping</a></li>
-    </ul>
-  </nav>
-  
-  {% block content %}{% endblock %}
-  
+<body class="root-app">
+  <div class="sidebar">
+    <h2>MyBookLib</h2>
+    <nav>
+      <ul>
+        <li><a href="/">Beranda</a></li>
+        <li><a href="/add-book">Tambah Buku</a></li>
+        <li><a href="/ping">Tentang</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+
   {% block script %}
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   {% endblock %}
