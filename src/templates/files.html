@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Berkas</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-4">Berkas</h1>
+
+  <ul>
+    {% for file in files %}
+    <li>
+      <a href="/files?path={{ file }}">{{ file }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
+  <div>
+    <a class="button" href="/files">Buat File</a>
+  </div>
+
+  {% if mode == "edit" %}
+  <div class="mb-4">
+    <h3 class="mt-4 mb-4 font-bold">Mengubah {{ file_path }}</h3>
+    <form action="/save-file" method="post" enctype="application/x-www-form-urlencoded">
+      <input type="hidden" name="path" value="{{ file_path }}">
+      <div class="mb-4">
+        <textarea name="content" cols="30" rows="10">{{ file_content }}</textarea>
+      </div>
+      <button class="blue">Simpan</button>
+    </form>
+  </div>
+  {% endif %}
+
+  {% if mode == "create" %}
+  <h3 class="mt-4 mb-4 font-bold">Buat File Baru</h3>
+  <form action="/create-file" method="post">
+    <div class="mb-2">
+      <label for="">Nama Berkas</label>
+      <input type="text" name="filename">
+    </div>
+    <div class="mb-4">
+      <label for="">Konten</label>
+      <textarea name="content" cols="30" rows="10"></textarea>
+    </div>
+    <button class="blue">Simpan</button>
+  </form>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/ping.js') }}"></script>
+{% endblock %}

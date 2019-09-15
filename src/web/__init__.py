@@ -11,6 +11,7 @@ from src.lib.db import (
     find_all_book,
     remove_book_by_id
 )
+from src.utils.files import create_new_file, get_list_of_files
 
 # truncate_book()
 # seed_book()
@@ -30,8 +31,50 @@ def create_app():
     @app.route("/")
     def hello():
         result = find_all_book()
-        print(result)
         return render_template("index.html", books=result)
+
+    @app.route("/files", methods = ["GET"])
+    def list_files():
+        file_path = request.args.get('path')
+
+        file_content = ""
+        mode = "create"
+
+        if file_path and os.path.isfile(file_path):
+            mode = "edit"
+            with open(file_path, 'r') as file:
+                file_content = file.read()
+
+        files = get_list_of_files()
+        return render_template(
+            "files.html",
+            files=files,
+            file_content=file_content,
+            mode=mode,
+            file_path=file_path
+        )
+
+    @app.route("/save-file", methods = ["POST"])
+    def save_file_content():
+        content = request.form['content']
+        file_path = request.form['path']
+
+        if not file_path or not os.path.isfile(file_path):
+            return redirect('/files')
+
+        with open(file_path, 'w+') as file:
+            file.write(content)
+
+        return redirect('/files?path=' + file_path)
+
+    @app.route("/create-file", methods = ["POST"])
+    def create_file():
+        filename = request.form['filename']
+        content = request.form['content']
+
+        filepath = create_new_file(filename, content)
+
+        return redirect('/files?path='+ filepath)
 
     @app.route("/add-book", methods = ["GET"])
     def add_book():
@@ -39,8 +82,6 @@ def create_app():
 
     @app.route("/create-book", methods = ["POST"])
     def create_book():
-        print("-----")
-
         if  'file' not in request.files:
             return redirect('/')
 
@@ -67,8 +108,6 @@ def create_app():
 
     @app.route("/update-book/<id>", methods = ["POST"])
     def edit_book(id):
-        print("-----")
-
         if  'file' not in request.files:
             return redirect('/')
 
